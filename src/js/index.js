@@ -7,8 +7,6 @@ import Particle from './Particle';
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 
-const particleCount = 100;
-
 // nodes' positions are at their center and dimensions are from the center to the edge (half)
 const qtree = new Quadtree({ x: 400, y: 300, width: 400, height: 300 });
 
@@ -39,7 +37,7 @@ const insertParticles = count => {
   _.times(count, () => particles.push(new Particle()));
 };
 
-insertParticles(particleCount);
+insertParticles(100);
 
 const mouse = { x: 0, y: 0, radius: 10 };
 
@@ -73,7 +71,7 @@ const particleStat = document.getElementById('particle-count');
 const candidateStat = document.getElementById('candidate-count');
 
 const updateStats = candidates => {
-  particleStat.innerHTML = particleCount;
+  particleStat.innerHTML = particles.length;
   candidateStat.innerHTML = candidates;
 };
 
