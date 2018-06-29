@@ -22,28 +22,28 @@ class Quadtree {
     );
   }
 
-  // find the child node that contains the item
+  // find the subnode that contains the item
   findContainer = item => this.nodes.findIndex(node => node.contains(item, node));
 
   contains = (item, node) => (
-    item.x <= node.bounds.x + node.bounds.width &&
-    item.x >= node.bounds.x - node.bounds.width &&
-    item.y <= node.bounds.y + node.bounds.height &&
-    item.y >= node.bounds.y - node.bounds.height
+    item.x + item.radius <= node.bounds.x + node.bounds.width &&
+    item.x - item.radius >= node.bounds.x - node.bounds.width &&
+    item.y + item.radius <= node.bounds.y + node.bounds.height &&
+    item.y - item.radius >= node.bounds.y - node.bounds.height
   );
 
   insert = item => {
-    // if this node has child nodes, insert the object into one of them
+    // if this node has subnodes, insert the object into one of them
     if (!_.isEmpty(this.nodes)) {
       // find the correct node to insert the item into
       const index = this.findContainer(item);
-      if (index === -1) return;
-
-      this.nodes[index].insert(item);
-      return;
+      if (index !== -1) {
+        this.nodes[index].insert(item);
+        return;
+      }
     }
 
-    // if this node does not have children nodes, insert the item here
+    // if this node doesn't have subnodes or the item doesn't fit in one, insert it here
     this.objects.push(item);
 
     // if this node has reached capacity
@@ -51,16 +51,15 @@ class Quadtree {
       if (_.isEmpty(this.nodes)) this.split();
 
       // move objects to their containing subnodes
-      this.objects.forEach(object => {
+      this.objects.forEach((object, i) => {
         // find the correct node to insert the item into
         const index = this.findContainer(object);
-        if (index === -1) return;
-
-        this.nodes[index].insert(object);
+        if (index !== -1) {
+          this.nodes[index].insert(object);
+          // remove object from this node
+          this.objects.splice(i, 1);
+        }
       });
-
-      // remove objects from this node
-      this.objects = [];
     }
   }
 

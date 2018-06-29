@@ -4,8 +4,9 @@ class Particle {
   constructor() {
     this.x = _.random(800);
     this.y = _.random(600);
-    this.vx = _.random(-1, 1, true);
-    this.vy = _.random(-1, 1, true);
+    this.radius = 3;
+    this.vx = _.random(-0.5, 0.5, true);
+    this.vy = _.random(-0.5, 0.5, true);
     this.color = '#FF0099';
   }
 
