@@ -1,0 +1,18 @@
+import _ from 'lodash';
+
+class Particle {
+  constructor() {
+    this.x = _.random(800);
+    this.y = _.random(600);
+    this.vx = _.random(-1, 1, true);
+    this.vy = _.random(-1, 1, true);
+    this.color = '#FF0099';
+  }
+
+  move = () => {
+    this.x += this.vx;
+    this.y += this.vy;
+  }
+}
+
+export default Particle;
