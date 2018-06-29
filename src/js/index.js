@@ -7,6 +7,8 @@ import Particle from './Particle';
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 
+const particleCount = 100;
+
 // nodes' positions are at their center and dimensions are from the center to the edge (half)
 const qtree = new Quadtree({ x: 400, y: 300, width: 400, height: 300 });
 
@@ -26,7 +28,7 @@ const particles = [];
 const drawParticles = () => {
   particles.forEach(particle => {
     c.beginPath();
-    c.arc(particle.x, particle.y, 3, 0, Math.PI * 2);
+    c.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
     c.fillStyle = particle.color;
     c.fill();
     c.closePath();
@@ -41,9 +43,9 @@ const insertParticles = count => {
   });
 };
 
-insertParticles(500);
+insertParticles(particleCount);
 
-const mouse = { x: 0, y: 0 };
+const mouse = { x: 0, y: 0, radius: 10 };
 
 canvas.addEventListener('mousemove', event => {
   let mouseX;
@@ -64,12 +66,19 @@ canvas.addEventListener('mousemove', event => {
 });
 
 const drawCursor = () => {
-  const { x, y } = mouse;
   c.beginPath();
-  c.arc(x, y, 10, 0, Math.PI * 2);
+  c.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
   c.fillStyle = 'rgba(246, 79, 89, 0.3)';
   c.fill();
   c.closePath();
+};
+
+const particleStat = document.getElementById('particle-count');
+const candidateStat = document.getElementById('candidate-count');
+
+const updateStats = candidates => {
+  particleStat.innerHTML = particleCount;
+  candidateStat.innerHTML = candidates;
 };
 
 const loop = () => {
@@ -95,6 +104,8 @@ const loop = () => {
   candidates.forEach(candidate => {
     candidate.color = '#12c2e9';
   });
+
+  updateStats(candidates.length);
 
   c.fillStyle = 'white';
   c.fillRect(0, 0, canvas.width, canvas.height);

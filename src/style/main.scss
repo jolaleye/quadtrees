@@ -25,7 +25,7 @@ h1 {
   font-size: 3.5em;
   font-weight: 300;
   color: white;
-  margin-bottom: 1em;
+  margin-bottom: 1rem;
 }
 
 canvas {
@@ -33,4 +33,21 @@ canvas {
   cursor: none;
   border-radius: 3px;
   box-shadow: 0 5px 40px -5px rgba(0, 0, 0, 0.5);
+}
+
+.stats {
+  width: 40%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1em;
+  color: white;
+}
+
+.stats span {
+  margin-right: 0.5em;
+  color: #FF0099;
 }
