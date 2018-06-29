@@ -36,11 +36,7 @@ const drawParticles = () => {
 };
 
 const insertParticles = count => {
-  _.times(count, () => {
-    const particle = new Particle();
-    particles.push(particle);
-    qtree.insert(particle);
-  });
+  _.times(count, () => particles.push(new Particle()));
 };
 
 insertParticles(particleCount);
