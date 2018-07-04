@@ -20,22 +20,29 @@ class Quadtree {
       new Quadtree({ x: x - subWidth, y: y + subHeight, width: subWidth, height: subHeight }),
       new Quadtree({ x: x + subWidth, y: y + subHeight, width: subWidth, height: subHeight }),
     );
+
+    // move children to new subnodes
+    const items = this.objects;
+    this.objects = [];
+    items.forEach(item => this.insert(item));
   }
 
   // find the subnode that contains the item
-  findContainer = item => this.nodes.findIndex(node => node.contains(item, node));
+  findContainer = item => this.nodes.findIndex(node => node.contains(item));
 
-  contains = (item, node) => (
-    item.x + item.radius <= node.bounds.x + node.bounds.width &&
-    item.x - item.radius >= node.bounds.x - node.bounds.width &&
-    item.y + item.radius <= node.bounds.y + node.bounds.height &&
-    item.y - item.radius >= node.bounds.y - node.bounds.height
+  contains = item => (
+    item.x + item.radius <= this.bounds.x + this.bounds.width &&
+    item.x - item.radius >= this.bounds.x - this.bounds.width &&
+    item.y + item.radius <= this.bounds.y + this.bounds.height &&
+    item.y - item.radius >= this.bounds.y - this.bounds.height
   );
 
   insert = item => {
-    // if this node has subnodes, insert the object into one of them
+    if (!this.contains(item)) return;
+
+    // if this node has subnodes, try to insert the item into one of them
     if (!_.isEmpty(this.nodes)) {
-      // find the correct node to insert the item into
+      // find the node that the item fits into
       const index = this.findContainer(item);
       if (index !== -1) {
         this.nodes[index].insert(item);
@@ -43,23 +50,12 @@ class Quadtree {
       }
     }
 
-    // if this node doesn't have subnodes or the item doesn't fit in one, insert it here
+    // if the node doesn't have subnodes or the item doesn't fit in one, insert it here
     this.objects.push(item);
 
-    // if this node has reached capacity
-    if (this.objects.length > this.capacity) {
-      if (_.isEmpty(this.nodes)) this.split();
-
-      // move objects to their containing subnodes
-      this.objects.forEach((object, i) => {
-        // find the correct node to insert the item into
-        const index = this.findContainer(object);
-        if (index !== -1) {
-          this.nodes[index].insert(object);
-          // remove object from this node
-          this.objects.splice(i, 1);
-        }
-      });
+    // split if this node has exceeded capacity
+    if (this.objects.length >= this.capacity && _.isEmpty(this.nodes)) {
+      this.split();
     }
   }
 
