@@ -37,7 +37,7 @@ const insertParticles = count => {
   _.times(count, () => particles.push(new Particle()));
 };
 
-insertParticles(100);
+insertParticles(200);
 
 const mouse = { x: 0, y: 0, radius: 10 };
 
@@ -85,7 +85,7 @@ const loop = () => {
     particle.move();
 
     // if the particle has moved outside the bounds of the tree
-    if (!qtree.contains(particle, qtree)) {
+    if (!qtree.contains(particle)) {
       particles.splice(i, 1);
       insertParticles(1);
     } else {
