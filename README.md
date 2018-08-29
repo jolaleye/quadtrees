@@ -1,5 +1,5 @@
 # Quadtrees
 
-A quadtree visualization project made to get experience with the data structure.
+A visualization project built to gain experience with quadtrees.
 
 ![](screenshot.png)
